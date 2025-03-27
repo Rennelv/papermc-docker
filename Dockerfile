@@ -17,7 +17,8 @@ RUN apk update --no-cache && \
         bash \
         wget \
         jq \
-        net-tools
+        net-tools \
+        tmux
 
 RUN mkdir -p /app/scripts /papermc && \
     chown -R papermc:papermc /app/scripts /papermc
@@ -28,7 +29,7 @@ RUN chmod +x /app/scripts/papermc.sh
 USER papermc
 WORKDIR /papermc
 
-CMD ["/app/scripts/papermc.sh"]
+CMD ["tmux", "new-session", "-s", "papermc", "./papermc.sh"]
 
 EXPOSE 25565/tcp
 VOLUME ["/papermc"]
