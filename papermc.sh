@@ -8,8 +8,6 @@ stop_server() {
   exit 0
 }
 
-# Регистрируем обработчик SIGTERM
-trap stop_server SIGTERM
 
 MC_VERSION=${MC_VERSION:-latest}
 PAPER_BUILD=${PAPER_BUILD:-latest}
@@ -29,6 +27,9 @@ JAR="paper-$MC_VERSION-$PAPER_BUILD.jar"
 echo "eula=${EULA:-false}" > eula.txt
 
 # exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
+
+# Регистрируем обработчик SIGTERM SIGINT
+trap stop_server SIGTERM SIGINT
 
 # Запуск сервера в tmux
 if ! tmux has-session -t paper 2>/dev/null; then

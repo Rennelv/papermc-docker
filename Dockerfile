@@ -18,7 +18,8 @@ RUN apk update --no-cache && \
         wget \
         jq \
         net-tools \
-        tmux
+        tmux \
+        ncurces
 
 RUN mkdir -p /app/scripts /papermc && \
     chown -R papermc:papermc /app/scripts /papermc
