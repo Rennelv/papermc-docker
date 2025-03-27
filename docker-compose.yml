@@ -2,8 +2,6 @@ services:
   minecraft-papermc:
     build: .
     image: papermc
-    stdin_open: true  # Открыть STDIN
-    tty: true  # Выделить TTY
     container_name: papermc-server
     restart: unless-stopped
     environment:
