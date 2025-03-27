@@ -18,7 +18,8 @@ RUN apk update --no-cache && \
         wget \
         jq \
         net-tools \
-        ncurses
+        ncurses \
+        screen
 
 RUN mkdir -p /app/scripts /papermc && \
     chown -R papermc:papermc /app/scripts /papermc

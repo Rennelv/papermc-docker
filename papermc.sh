@@ -18,4 +18,6 @@ JAR="paper-$MC_VERSION-$PAPER_BUILD.jar"
 
 echo "eula=${EULA:-false}" > eula.txt
 
-exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
+# exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
+
+screen -dmS papermc java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
