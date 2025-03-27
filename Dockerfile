@@ -29,7 +29,7 @@ RUN chmod +x /app/scripts/papermc.sh
 USER papermc
 WORKDIR /papermc
 
-CMD ["tmux", "new-session", "-s", "papermc", "./papermc.sh"]
+CMD ["/app/scripts/papermc.sh"]
 
 EXPOSE 25565/tcp
 VOLUME ["/papermc"]

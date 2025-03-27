@@ -1,6 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
+# Функция для остановки сервера
+stop_server() {
+  echo "Остановка сервера..."
+  tmux send-keys -t paper "stop" Enter
+  exit 0
+}
+
+# Регистрируем обработчик SIGTERM
+trap stop_server SIGTERM
+
 MC_VERSION=${MC_VERSION:-latest}
 PAPER_BUILD=${PAPER_BUILD:-latest}
 
@@ -18,4 +28,15 @@ JAR="paper-$MC_VERSION-$PAPER_BUILD.jar"
 
 echo "eula=${EULA:-false}" > eula.txt
 
-exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
+# exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
+
+# Запуск сервера в tmux
+if ! tmux has-session -t paper 2>/dev/null; then
+  tmux new-session -d -s paper \
+    "java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar '$JAR' nogui"
+fi
+
+# Мониторинг сессии
+while tmux has-session -t paper 2>/dev/null; do
+  sleep 10
+done
