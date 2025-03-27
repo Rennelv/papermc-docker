@@ -27,5 +27,7 @@ else
   tmux new-session -d -s papermc "exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} ${JAVA_OPTS} -jar \"$JAR\" nogui"
 fi
 
-exho "Attaching to tmux session..."
-tmux attach-session -t papermc
+tmux pipe-pane -o -t papermc 'cat >> /proc/1/fd/1'
+
+# echo "Attaching to tmux session..."
+# tmux attach-session -t papermc

@@ -1,6 +1,8 @@
 FROM alpine:latest
 
-RUN adduser -D papermc
+RUN adduser -D papermc && \
+    mkdir -p /papermc /app/scripts && \
+    chown -R papermc:papermc /papermc /app/scripts
 
 # Environment variables
 ENV MC_VERSION="latest" \
@@ -19,10 +21,8 @@ RUN apk update --no-cache && \
         jq \
         net-tools \
         ncurses \
-        tmux
-
-RUN mkdir -p /app/scripts /papermc && \
-    chown -R papermc:papermc /app/scripts /papermc
+        tmux && \
+    rm -rf /var/cache/apk/*
 
 COPY --chown=papermc:papermc papermc.sh /app/scripts/
 RUN chmod +x /app/scripts/papermc.sh
