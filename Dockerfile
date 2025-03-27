@@ -1,7 +1,6 @@
-# We're no longer using openjdk:17-slim as a base due to several unpatched vulnerabilities.
-# The results from basing off of alpine are a smaller (by 47%) and faster (by 17%) image.
-# Even with bash installed.     -Corbe
 FROM alpine:latest
+
+RUN adduser -D papermc
 
 # Environment variables
 ENV MC_VERSION="latest" \
@@ -10,19 +9,26 @@ ENV MC_VERSION="latest" \
     MC_RAM="" \
     JAVA_OPTS=""
 
-COPY papermc.sh .
-RUN apk update \
-    && apk add libstdc++ \
-    && apk add openjdk21-jre \
-    && apk add bash \
-    && apk add wget \
-    && apk add jq \
-    && mkdir /papermc
+RUN apk update --no-cache && \
+    apk upgrade --no-cache --available && \
+    apk add --no-cache \
+        libstdc++ \
+        openjdk21-jre \
+        bash \
+        wget \
+        jq \
+        net-tools
 
-# Start script
-CMD ["bash", "./papermc.sh"]
+RUN mkdir -p /app/scripts /papermc && \
+    chown -R papermc:papermc /app/scripts /papermc
 
-# Container setup
+COPY --chown=papermc:papermc papermc.sh /app/scripts/
+RUN chmod +x /app/scripts/papermc.sh
+
+USER papermc
+WORKDIR /papermc
+
+CMD ["/app/scripts/papermc.sh"]
+
 EXPOSE 25565/tcp
-EXPOSE 25565/udp
-VOLUME /papermc
+VOLUME ["/papermc"]
