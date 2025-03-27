@@ -1,5 +1,7 @@
 services:
   minecraft-papermc:
+    tty: true  # Выделить TTY
+    stdin_open: true  # Открыть STDIN
     build: .
     image: papermc
     container_name: papermc-server
