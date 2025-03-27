@@ -20,6 +20,13 @@ echo "eula=${EULA:-false}" > eula.txt
 
 # exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
 
+shutdown() {
+  echo "SIGTERM catched, stopping server..."
+  tmux send-keys -t papermc "stop" C-m
+}
+
+trap shutdown SIGTERM
+
 if tmux ls | grep -q "^papermc:"; then
   echo "tmux-session already exists."
 else
@@ -28,6 +35,11 @@ else
 fi
 
 tmux pipe-pane -o -t papermc 'cat >> /proc/1/fd/1'
+
+# Следим за процессом, чтобы контейнер не завершался
+while tmux has-session -t papermc 2>/dev/null; do
+  sleep 5
+done
 
 # echo "Attaching to tmux session..."
 # tmux attach-session -t papermc
