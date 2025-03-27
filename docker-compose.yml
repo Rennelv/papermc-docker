@@ -6,7 +6,6 @@ services:
     # stdin_open: true  # Открыть STDIN
     container_name: papermc-server
     restart: unless-stopped
-    stop_timeout: 30
     environment:
       - EULA=${EULA:-FALSE}           
       - MC_VERSION=${MC_VERSION:-latest}
