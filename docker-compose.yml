@@ -1,5 +1,5 @@
 services:
-  minecraft-papermc:
+  papermc-server:
     build: .
     image: papermc
     # tty: true  # Выделить TTY

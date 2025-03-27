@@ -20,4 +20,12 @@ echo "eula=${EULA:-false}" > eula.txt
 
 # exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
 
-screen -dmS papermc java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} -jar "$JAR" nogui
+if tmux ls | grep -q "^papermc:"; then
+  echo "tmux-session already exists."
+else
+  echo "Creating new tmux session and starting server..."
+  tmux new-session -d -s papermc "exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} ${JAVA_OPTS} -jar \"$JAR\" nogui"
+fi
+
+exho "Attaching to tmux session..."
+tmux attach-session -t papermc
