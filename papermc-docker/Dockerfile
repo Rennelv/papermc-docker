@@ -11,9 +11,7 @@ ENV MC_VERSION="latest" \
     MC_RAM="" \
     JAVA_OPTS=""
 
-RUN apk update --no-cache && \
-    apk upgrade --no-cache --available && \
-    apk add --no-cache \
+RUN apk add --no-cache \
         libstdc++ \
         openjdk21-jre \
         bash \
@@ -21,8 +19,7 @@ RUN apk update --no-cache && \
         jq \
         net-tools \
         ncurses \
-        tmux && \
-    rm -rf /var/cache/apk/*
+        tmux
 
 COPY --chown=papermc:papermc papermc.sh /app/scripts/
 RUN chmod +x /app/scripts/papermc.sh

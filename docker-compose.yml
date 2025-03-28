@@ -1,9 +1,8 @@
 services:
   papermc-server:
-    build: .
+    init: true
+    build: ./papermc-docker
     image: papermc
-    tty: true  # Выделить TTY
-    # stdin_open: true  # Открыть STDIN
     container_name: papermc-server
     restart: unless-stopped
     environment:
@@ -11,15 +10,21 @@ services:
       - MC_VERSION=${MC_VERSION:-latest}
       - PAPER_BUILD=${PAPER_BUILD:-latest}
       - MC_RAM=${MC_RAM:-4096M}
+      - JAVA_OPTS=${JAVA_OPTS}
     ports:
       - "25565:25565/tcp"             
     volumes:
-      - ../data:/papermc              
+      - ./data:/papermc              
     healthcheck:
       test: ["CMD-SHELL", "netstat -ln | grep 25565 || exit 1"]
       interval: 1m
       timeout: 5s
       retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - papermc-net
 
