@@ -18,22 +18,7 @@ JAR="paper-$MC_VERSION-$PAPER_BUILD.jar"
 
 echo "eula=${EULA:-false}" > eula.txt
 
-shutdown() {
-  echo "SIGTERM catched, stopping server..."
-  tmux send-keys -t papermc "stop" C-m
-}
+echo "Starting PaperMC version ${MC_VERSION}, build ${PAPER_BUILD}"
+echo "JVM options: ${JAVA_OPTS}"
 
-trap shutdown SIGTERM
-
-if tmux has-session -t papermc 2>/dev/null; then
-  echo "tmux-session already exists."
-else
-  echo "Creating new tmux session and starting server..."
-  tmux new-session -d -s papermc "exec java -Xms${MC_RAM:-1024M} -Xmx${MC_RAM:-1024M} ${JAVA_OPTS} -jar \"$JAR\" nogui"
-fi
-
-tmux pipe-pane -o -t papermc 'cat >> /proc/1/fd/1'
-
-while tmux has-session -t papermc 2>/dev/null; do
-  sleep 5
-done
+exec java ${JAVA_OPTS} -jar "${JAR}" nogui

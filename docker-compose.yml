@@ -1,28 +1,29 @@
 services:
   papermc-server:
-    init: true
+    # init: true
     build: ./papermc-docker
-    image: papermc
-    container_name: papermc-server
+    # image: papermc
+    # container_name: papermc-server
+    # tty: true
+    stdin_open: true
     restart: unless-stopped
     environment:
       - EULA=${EULA:-FALSE}           
       - MC_VERSION=${MC_VERSION:-latest}
       - PAPER_BUILD=${PAPER_BUILD:-latest}
-      - MC_RAM=${MC_RAM:-4096M}
       - JAVA_OPTS=${JAVA_OPTS}
     ports:
       - "25565:25565/tcp"             
     volumes:
       - ./data:/papermc              
-    healthcheck:
-      test: ["CMD-SHELL", "netstat -ln | grep 25565 || exit 1"]
-      interval: 1m
-      timeout: 5s
-      retries: 3
-    networks:
-      - papermc-net
+    # healthcheck:
+    #   test: ["CMD-SHELL", "netstat -ln | grep 25565 || exit 1"]
+    #   interval: 1m
+    #   timeout: 5s
+    #   retries: 3
+#     networks:
+#       - papermc-net
 
-networks:                          
-  papermc-net:
-    driver: bridge
+# networks:                          
+#   papermc-net:
+#     driver: bridge

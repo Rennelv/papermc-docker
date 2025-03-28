@@ -2,7 +2,7 @@ FROM alpine:latest
 
 RUN adduser -D papermc && \
     mkdir -p /papermc /app/scripts && \
-    chown -R papermc:papermc /papermc /app/scripts
+    chown -R papermc:papermc /papermc /app/scripts /app
 
 # Environment variables
 ENV MC_VERSION="latest" \
@@ -16,10 +16,7 @@ RUN apk add --no-cache \
         openjdk21-jre \
         bash \
         wget \
-        jq \
-        net-tools \
-        ncurses \
-        tmux
+        jq 
 
 COPY --chown=papermc:papermc papermc.sh /app/scripts/
 RUN chmod +x /app/scripts/papermc.sh
@@ -27,7 +24,7 @@ RUN chmod +x /app/scripts/papermc.sh
 USER papermc
 WORKDIR /papermc
 
-CMD ["/app/scripts/papermc.sh"]
+ENTRYPOINT ["/app/scripts/papermc.sh"]
 
 EXPOSE 25565/tcp
 VOLUME ["/papermc"]
